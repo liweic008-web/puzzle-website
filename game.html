@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎲 擲骰子與抽籤小工具</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f6;
+            text-align: center;
+            padding: 30px 15px;
+            color: #333;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 { color: #2c3e50; }
+        .box {
+            margin: 20px 0;
+            padding: 15px;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+        }
+        .dice {
+            font-size: 80px;
+            margin: 10px 0;
+            user-select: none;
+        }
+        .result-text {
+            font-size: 24px;
+            font-weight: bold;
+            color: #e74c3c;
+            min-height: 36px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        input[type="text"] {
+            width: 80%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🎲 互動小工具</h1>
+
+    <!-- 1. 擲骰子區塊 -->
+    <div class="box">
+        <h2>🎲 擲骰子</h2>
+        <div id="diceDisplay" class="dice">⚀</div>
+        <button onclick="rollDice()">擲骰子！</button>
+    </div>
+
+    <!-- 2. 抽籤區塊 -->
+    <div class="box">
+        <h2>🎯 隨機抽籤 / 決定器</h2>
+        <p>輸入選項（用半形逗點分隔）：</p>
+        <input type="text" id="drawOptions" value="大吉, 中吉, 小吉, 抽中大獎, 銘謝惠顧">
+        <br>
+        <button onclick="drawOption()">開始抽籤！</button>
+        <div id="drawResult" class="result-text" style="margin-top: 15px;"></div>
+    </div>
+</div>
+
+<script>
+    // 🎲 擲骰子邏輯
+    const diceFaces = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
+    function rollDice() {
+        const diceElement = document.getElementById('diceDisplay');
+        let count = 0;
+        // 增加動畫效果
+        const timer = setInterval(() => {
+            const randomIndex = Math.floor(Math.random() * 6);
+            diceElement.textContent = diceFaces[randomIndex];
+            count++;
+            if (count > 10) {
+                clearInterval(timer);
+            }
+        }, 50);
+    }
+
+    // 🎯 抽籤邏輯
+    function drawOption() {
+        const input = document.getElementById('drawOptions').value;
+        const resultDisplay = document.getElementById('drawResult');
+        const options = input.split(',').map(item => item.trim()).filter(item => item !== '');
+
+        if (options.length === 0) {
+            resultDisplay.textContent = '請至少輸入一個選項！';
+            return;
+        }
+
+        resultDisplay.textContent = '抽籤中...';
+        setTimeout(() => {
+            const randomIndex = Math.floor(Math.random() * options.length);
+            resultDisplay.textContent = '🎉 抽中了：' + options[randomIndex];
+        }, 500);
+    }
+</script>
+
+</body>
+</html>
